@@ -1,0 +1,12 @@
+c:\users\hdmi\documents\visual studio 2010\Projects\Complex_Numbers\Complex_Numbers\bin\Debug\Complex_Numbers.exe
+c:\users\hdmi\documents\visual studio 2010\Projects\Complex_Numbers\Complex_Numbers\bin\Debug\Complex_Numbers.pdb
+c:\users\hdmi\documents\visual studio 2010\Projects\Complex_Numbers\Complex_Numbers\obj\x86\Debug\Complex_Numbers.exe
+c:\users\hdmi\documents\visual studio 2010\Projects\Complex_Numbers\Complex_Numbers\obj\x86\Debug\Complex_Numbers.pdb
+C:\Users\hdmi\Documents\Visual Studio 2010\Projects\Complex_Numbers\Complex_Numbers\bin\Debug\Complex_Numbers.XML
+C:\Users\hdmi\documents\visual studio 2010\Projects\Complex_Numbers\Complex_Numbers\obj\x86\Debug\Complex_Numbers.csprojResolveAssemblyReference.cache
+G:\Archift\Projects\Complex_Numbers\Complex_Numbers\bin\Debug\Complex_Numbers.XML
+G:\Archift\Projects\Complex_Numbers\Complex_Numbers\obj\x86\Debug\Complex_Numbers.exe
+G:\Archift\Projects\Complex_Numbers\Complex_Numbers\obj\x86\Debug\Complex_Numbers.pdb
+G:\Archift\Projects\Complex_Numbers\Complex_Numbers\bin\Debug\Complex_Numbers.exe
+G:\Archift\Projects\Complex_Numbers\Complex_Numbers\bin\Debug\Complex_Numbers.pdb
+G:\Archift\Projects\Complex_Numbers\Complex_Numbers\obj\x86\Debug\Complex_Numbers.csprojResolveAssemblyReference.cache
