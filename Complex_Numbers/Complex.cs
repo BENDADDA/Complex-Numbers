@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Text.RegularExpressions;
 namespace System
 {
     namespace Matlab
@@ -239,7 +240,7 @@ namespace System
         /// <summary>
         /// A class representing complex numbers 
         /// </summary>
-        public class Complex
+        public class Complex:IEquatable<Complex>
         {
             /// <summary>
             /// The real part of the complex number
@@ -337,18 +338,25 @@ namespace System
             }
             public static Complex operator -(Complex z)
             {
+               
                 return new Complex(-z.x, -z.y);
             }
-
-
+           
             public static implicit operator Complex(double x)
             {
                 return new Complex(x, 0);
             }
-
-
+            public static bool operator ==(Complex left, Complex right)
+            {
+                return (left.x == right.x && left.y == right.y);
+            }
+            public static bool operator !=(Complex left, Complex right)
+            {
+                return (left.x != right.x || left.y != right.y);
+            }
             private double Abs()
             {
+               
                 return Math.Sqrt(x * x + y * y);
             }
             private double Arg()
@@ -366,37 +374,203 @@ namespace System
 
 
 
-
-
-           
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <returns></returns>
+            public override bool Equals(object obj)
+            {
+                Complex Obj;
+                Obj = (Complex)obj;
+                return (this.x == Obj.x && this.y == Obj.y);
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="z"></param>
+            /// <returns></returns>
+            public bool Equals(Complex z)
+            {
+                return z == this;
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <returns></returns>
             public override string ToString()
             {
 
                 double a, b;
-                a = Math.Round(x, 2);
-                b = Math.Round(y, 2);
+                a = x;
+                b = y;
                 return "(" + a + "," + b + ")";
 
             }
-
             /// <summary>
             /// 
             /// </summary>
             /// <param name="str"></param>
             /// <returns></returns>
+            public string ToString(string str="B")
+            {
+                if (str == "B")
+                    return ToString();
+                if (str == "F")
+                {
+                    double a;
+                    a = x;
+                    string o = y < 0 ? "-" : "+";
+                    string b = y == 1 || y == -1 ? "" : Math.Abs(y).ToString();
+                    return x + o + b + "i";
+                }
+                return "";
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <returns></returns>
+            public override int GetHashCode()
+            {
+                return (x.ToString() + y.ToString()).GetHashCode();
+            }
+
+            /// <summary>Converts the string representation of a number to its complex-precision complex-point number equivalent.</summary>
+            /// <returns>A complex-precision complex-point number that is equivalent to the numeric value or symbol specified in <paramref name="str" />.</returns>
+            /// <param name="str">A string that contains a complex number to convert. </param>
             public static Complex Parse(string str)
             {
-                int i; string a, b = "0";
-                if (str.Contains(','))
+                string dexp = @"^\s*[-+]?\d+\.?\d*\s*$";
+                string cexp = @"^\s*\([-+]?\d+\.?\d*\,[-+]?\d+\.?\d*\)\s*$";
+                Regex regex = new Regex(cexp);
+                if (regex.IsMatch(str))
                 {
-                    i = str.IndexOf(",");
-                    a = str.Substring(0, i);
-                    b = str.Substring(i + 1, str.Length - a.Length - 1);
-
+                    double x, y;
+                    regex = new Regex(@"[-+]?\d+\.?\d*");
+                    Match match = regex.Match(str);
+                    x = Convert.ToDouble(match.Groups[0].Value);
+                    match=match.NextMatch();
+                    y = Convert.ToDouble(match.Groups[0].Value);
+                    return new Complex(x, y);
                 }
-                else a = str;
+                regex = new Regex(dexp);
+                if (regex.IsMatch(str))
+                {
+                    double x = Convert.ToDouble(str);
+                    return x;
+                }
+                regex = new Regex(@"^\s*[-+]?i\s*$");
+                if (regex.IsMatch(str))
+                {
+                    double y = 1;
+                    regex = new Regex(@"[-+]?");
+                    Match match = regex.Match(str);
+                    if (match.Groups[0].Value == "-") y = -1;
+                    return new Complex(0, y);
+                }
+                regex = new Regex(@"^\s*[-+]?\d+\.?\d*[-+]\d+\.?\d*i\s*$");
+                if (regex.IsMatch(str))
+                {
+                    double x, y;
+                    regex = new Regex(@"[-+]?\d+\.?\d*");
+                    Match match = regex.Match(str);
+                    x = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex(@"[-+]\d+\.?\d*");
+                    match = regex.Match(str);
+                    y = Convert.ToDouble(match.Groups[0].Value);
+                    return new Complex(x, y);
+                }
+                regex = new Regex(@"^\s*[-+]?\d+\.?\d*[-+]i\s*$");//5-i
+                if (regex.IsMatch(str))
+                {
+                    double x;
+                    double y = -1;
+                    regex = new Regex(@"[-+]?\d+\.?\d*");
+                    Match match = regex.Match(str);
+                    x = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex(@"[-+]?");
+                    match = regex.Match(str);
+                    if (match.Groups[0].Value == "-") y = -1;
+                    return new Complex(x, y);
+                }
+                regex = new Regex(@"^\s*[-+]?\d+\.?\d*[-+]i\d+\.?\d*\s*$");
+                if (regex.IsMatch(str))
+                {
+                    double x, y;
+                    regex = new Regex(@"[-+]?\d+\.?\d*");
+                    Match match = regex.Match(str);
+                    x = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex(@"\d+\.?\d*");
+                    match = regex.Match(str);
+                    match = match.NextMatch();
+                    y = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex(@"[-+]");
+                    match = regex.Match(str);
+                    if (match.Groups[0].Value == "-") y = -y;
+                    return new Complex(x, y);
+                }
+                regex = new Regex(@"^\s*[-+]?\d+\.?\d*i\s*$");
+                if (regex.IsMatch(str))
+                {
+                    double y;
+                    regex = new Regex(@"[-+]?\d+\.?\d*");
+                    Match match = regex.Match(str);
+                    y = Convert.ToDouble(match.Groups[0].Value);
+                    return new Complex(0, y);
+                }
+                regex = new Regex(@"^\s*([-+]?i\d+\.?\d*)\s*$");
+                if (regex.IsMatch(str))
+                {
+                    double y;
+                    regex = new Regex(@"\d+\.?\d*");
+                    Match match = regex.Match(str);
+                    y = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex(@"[-+]?");
+                    match = regex.Match(str);
+                    if (match.Groups[0].Value == "-") y = -y;
+                    return new Complex(0, y);
+                }
+                regex = new Regex(@"^\s*[-+]?\d+\.?\d*i[-+]\d+\.?\d*\s*$");
+                if (regex.IsMatch(str))
+                {
+                    double x, y;
+                    regex = new Regex(@"[-+]?\d+\.?\d*");
+                    Match match = regex.Match(str);
+                    y = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex(@"[-+]\d+\.?\d*");
+                    match = regex.Match(str);
+                    x = Convert.ToDouble(match.Groups[0].Value);
+                    return new Complex(x, y);
+                }
+                regex = new Regex(@"^\s*[-+]?i[-+]\d+\.?\d*\s*$");
+                if (regex.IsMatch(str))
+                {
+                    double x, y = 1;
 
-                return new Complex(double.Parse(a), double.Parse(b));
+                    regex = new Regex(@"[-+]\d+\.?\d*");
+                    Match match = regex.Match(str);
+                    x = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex(@"[-+]?");
+                    match = regex.Match(str);
+                    if (match.Groups[0].Value == "-") y = -1;
+                    return new Complex(x, y);
+                }
+                regex = new Regex(@"^\s*[-+]?i\d+\.?\d*[-+]\d+\.?\d*\s*$");
+                if (regex.IsMatch(str))
+                {
+                    double x, y;
+                    regex = new Regex(@"\d+\.?\d*");
+                    Match match = regex.Match(str);
+                    y = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex(@"[-+]\d+\.?\d*");
+                    match = regex.Match(str);
+                    x = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex(@"[-+]?");
+                    match = regex.Match(str);
+                    if (match.Groups[0].Value == "-") y = -y;
+                    return new Complex(x, y);
+                }
+                throw new FormatException();
             }
             /// <summary>
             /// 
@@ -416,6 +590,8 @@ namespace System
                 return false;
             }
 
+
+            
         }
     }
 }
