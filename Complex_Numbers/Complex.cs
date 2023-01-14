@@ -1,266 +1,47 @@
+﻿// System.Matlab.Complex
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+using System.Globalization;
 using System.Text.RegularExpressions;
+
 namespace System
 {
     namespace Matlab
     {
         /// <summary>
-        ///
-        /// </summary>
-        public static class Maths
-        {
-
-            /// <summary>
-            /// Calculating the Niberian Exponent for a Complex Number
-            /// </summary>
-            /// <param name="z">A complex number specifying a power</param>
-            /// <returns>Exp(z)</returns>
-            public static Complex Exp(Complex z)
-            {
-                double a, b;
-                a = Math.Exp(z.x) * Math.Cos(z.y);
-                b = Math.Exp(z.x) * Math.Sin(z.y);
-                return new Complex(a, b);
-            }
-            /// <summary>
-            /// To set the complex number using exponential form
-            /// </summary>
-            /// <param name="r">r is the modulus of  a complex number</param>
-            /// <param name="o">o is the argument of a complex number</param>
-            /// <returns></returns>
-            public static Complex ExpForm(double r, double o)
-            {
-                return new Complex(r * Math.Cos(o), r * Math.Sin(o));
-            }
-            /// <summary>
-            /// Returns a value indicating the sign of a complex number
-            /// </summary>
-            /// <param name="z">A complex number specifying an angle</param>
-            /// <returns></returns>
-            public static Complex Sign(Complex z)
-            {
-                return ExpForm(1, z.ARG);
-            }
-            /// <summary>
-            ///Returns the value of the logarithm of a complex number
-            /// </summary>
-            /// <param name="z">A complex  number  whose logarithm is to be found</param>
-            /// <returns></returns>
-            public static Complex Log(Complex z)
-            {
-                double a, b;
-                a = Math.Log(z.ABS);
-                b = z.ARG;
-                return new Complex(a, b);
-            }
-            /// <summary>
-            ///Returns the logarithm of specified complex number in a specified base
-            /// </summary>
-            /// <param name="z">A complex  number  whose logarithm is to be found</param>
-            /// <param name="n">A real nubmer specifies the logarithm base </param>
-            /// <returns></returns>
-            public static Complex Log(Complex z, double n)
-            {
-                return Log(z) / Log(n);
-            }
-            /// <summary>
-            /// Returns the logrithm of specified complex number in specified base
-            /// </summary>
-            /// <param name="z">A complex number whose logarithm is to be found</param>
-            /// <param name="n">A complex number specifies the logarithm base</param>
-            /// <returns></returns>
-            public static Complex Log(Complex z, Complex n)
-            {
-                return Log(z) / Log(n);
-            }
-            /// <summary>
-            /// Returns base 10 logarithm of specified complex number
-            /// </summary>
-            /// <param name="z">A complex number whose logarithm is to be found</param>
-            /// <returns></returns>
-            public static Complex Log10(Complex z)
-            {
-                return Log(z) / Math.Log(10);
-            }
-            /// <summary>
-            /// Returns the cosine of specified complex number
-            /// </summary>
-            /// <param name="z"></param>
-            /// <returns>A complex number whose cosine to be found</returns>
-            public static Complex Cos(Complex z)
-            {
-                Complex i = new Complex(0, 1);
-                Complex e1, e2;
-                e1 = Exp((z.ARG * i));
-                i = new Complex(0, -1);
-                e2 = Exp((z.ARG * i));
-                return (e1 + e2) / 2;
-            }
-            /// <summary>
-            /// Returns the sine of specified complex number
-            /// </summary>
-            /// <param name="z">A complex number whose sine to be found</param>
-            /// <returns></returns>
-            public static Complex Sin(Complex z)
-            {
-                Complex i = new Complex(0, 1);
-                Complex e1, e2;
-                e1 = Exp((z.ARG * i));
-                i = new Complex(0, -1);
-                e2 = Exp((z.ARG * i));
-                return (e1 - e2) / 2;
-            }
-            /// <summary>
-            /// Returns the tangent of specified complex number 
-            /// </summary>
-            /// <param name="z">A complex number whose tangent to be found</param>
-            /// <returns></returns>
-            public static Complex Tan(Complex z)
-            {
-                return Sin(z) / Cos(z);
-            }
-            /// <summary>
-            /// Returns the hyperbolic cosine of specfied complex number
-            /// </summary>
-            /// <param name="z">A complex number whose hyperbloci cosine of to be found</param>
-            /// <returns></returns>
-            public static Complex Cosh(Complex z)
-            {   
-                return (Exp(z) + Exp(-z)) / 2;
-            }
-            /// <summary>
-            /// Returns the hyperbolic tangent of specfied complex number
-            /// </summary>
-            /// <param name="z">A complex number whose hyperbloci tangent of to be found</param>
-            /// <returns></returns>
-            public static Complex Tanh(Complex z)
-            {
-                return Sinh(z) / Cosh(z);
-            }
-            /// <summary>
-            /// Returns the hyperbolic sine of specfied complex number
-            /// </summary>
-            /// <param name="z">A complex number whose hyperbloci sine of to be found</param>
-            /// <returns></returns>
-            public static Complex Sinh(Complex z)
-            {
-                return (Exp(z) - Exp(-z)) / 2;
-            }
-            /// <summary>
-            /// Returns the square root of specified complex nubmer
-            /// </summary>
-            /// <param name="z">A complex number</param>
-            /// <returns></returns>
-            public static Complex Sqrt(Complex z)
-            {   
-                double x = z.x, y = z.y;
-                double a = (x + Math.Sqrt(x * x + y * y)) / 2;
-                double b = Math.Sqrt(a - x);
-                return new Complex(Math.Sqrt(a), b);
-            }
-            /// <summary>
-            /// Return a specified complex nubmber raised to the specified power
-            /// </summary>
-            /// <param name="z">A complex number to raised a power </param>
-            /// <param name="n">A double -precision floating -point number that specifies a power</param>
-            /// <returns></returns>
-            public static Complex Power(Complex z, double n)
-            {   
-                if (n == 0) return new Complex(1, 0);
-                if (z.x == 0 && z.y == 0) return new Complex(0, 0);
-                return Exp(n * Log(z));
-            }
-            /// <summary>
-            /// Return a specified complex nubmber raised to the specified power where the power is a complex number
-            /// </summary>
-            /// <param name="z">A complex number to raised a power</param>
-            /// <param name="n">A complex number that  specifies a power</param>
-            /// <returns></returns>
-            public static Complex Power(Complex z, Complex n)
-            {
-                if (n.x == 0 && n.y == 0) return new Complex(1, 0);
-                if (z.x == 0 && z.y == 0) return new Complex(0, 0);
-                return Exp(n * Log(z));
-            }
-            /// <summary>
-            /// Returns the floor of complex number
-            /// </summary>
-            /// <param name="z">A complex number</param>
-            /// <returns></returns>
-            public static Complex Floor(Complex z)
-            {
-                return new Complex(Math.Floor(z.x), Math.Floor(z.y));
-            }
-            /// <summary>
-            /// Returns the ceiling of complex nubmer
-            /// </summary>
-            /// <param name="z">A complex number</param>
-            /// <returns></returns>
-            public static Complex Ceiling(Complex z)
-            {
-                return new Complex(Math.Ceiling(z.x), Math.Ceiling(z.y));
-            }
-            /// <summary>
-            /// Return a Magic Matrix in a specified dimensions where it is a square matrix
-            /// </summary>
-            /// <param name="k">k is a natural number specified the dimensions where the dimensions of the magic matrix is 2k+1</param>
-            /// <returns></returns>
-            public static int[,] MagicMatrix(int k)
-            {
-
-                int n = 2 * k + 1;
-                int[,] v = new int[n, n];
-                int l, c, i, N;
-                N = (n - 1) / 2; l = N - 1; c = N; i = 0;
-                while (i < n * n)
-                {
-                    if (l >= 0 && l < n && c >= 0 && c < n)
-                    {
-                        if (v[l, c] == 0) { v[l, c] = i + 1; i++; l--; c++; }
-                        else { l--; c--; }
-                    }
-                    else g(ref l, ref c, n - 1);
-                }
-                return v;
-            }
-            static void g(ref int a, ref int b, int n)
-            {
-                if (a == n + 1) a = 0;
-                if (a == -1) a = n;
-                if (b == n + 1) b = 0;
-                if (b == -1) b = n;
-            }
-
-
-        }
-        /// <summary>
         /// A class representing complex numbers 
         /// </summary>
-        public class Complex:IEquatable<Complex>
+        public struct Complex : IEquatable<Complex>, ISteerable, IFormattable, IConvertible
         {
+            private double x;
+            private double y;
             /// <summary>
             /// The real part of the complex number
             /// </summary>
-            public double x { get; set; }
+            public double X { get { return x; } set { x = value; } }
+
             /// <summary>
             /// The imaginary part of a complex number
             /// </summary>
-            public double y { get; set; }
-            /// <summary>
-            /// Modulus of complex number
-            /// </summary>
-            public double ABS { get { return Abs(); } }
+            public double Y { get { return y; } set { y = value; } }
+
+            public double ABS
+            {
+                get
+                {
+                    return Abs();
+                }
+            }
+
             /// <summary>
             /// Aruement of complex number
             /// </summary>
-            public double ARG { get { return Arg(); } }
-
-
-
+            public double ARG
+            {
+                get
+                {
+                    return Arg();
+                }
+            }
 
             /// <summary>
             /// Specifieds the complex number by two real numbers
@@ -272,121 +53,136 @@ namespace System
                 this.x = x;
                 this.y = y;
             }
-            /// <summary>
-            /// 
-            /// </summary>
-            public Complex()
-            {
-            }
 
             public static Complex operator +(Complex z, Complex w)
             {
-                return new Complex(z.x + w.x, z.y + w.y);
-
+                return new Complex(z.X + w.X, z.Y + w.Y);
             }
+
             public static Complex operator -(Complex z, Complex w)
             {
-                return new Complex(z.x - w.x, z.y - w.y);
+                return new Complex(z.X - w.X, z.Y - w.Y);
             }
+
             public static Complex operator +(Complex z, double a)
             {
-
-                return new Complex(z.x + a, z.y);
+                return new Complex(z.X + a, z.Y);
             }
+
             public static Complex operator -(Complex z, double a)
             {
-
-                return new Complex(z.x - a, z.y);
+                return new Complex(z.X - a, z.Y);
             }
+
             public static Complex operator +(double a, Complex z)
             {
-
-                return new Complex(z.x + a, z.y);
+                return new Complex(z.X + a, z.Y);
             }
+
             public static Complex operator -(double a, Complex z)
             {
-
-                return new Complex(a - z.x, -z.y);
+                return new Complex(a - z.X, 0.0 - z.Y);
             }
 
             public static Complex operator *(Complex z, Complex w)
             {
-                return new Complex(z.x * w.x - z.y * w.y, z.x * w.y + z.y * w.x);
+                return new Complex(z.X * w.X - z.Y * w.Y, z.X * w.Y + z.Y * w.X);
             }
+
             public static Complex operator *(Complex z, double a)
             {
-                return new Complex(z.x * a, z.y * a);
+                return new Complex(z.X * a, z.Y * a);
             }
+
             public static Complex operator *(double a, Complex z)
             {
-                return new Complex(z.x * a, z.y * a);
+                return new Complex(z.X * a, z.Y * a);
             }
+
             public static Complex operator /(Complex z, Complex w)
             {
-                double d = w.x * w.x + w.y * w.y;
-                return new Complex((z.x * w.x + z.y * w.y) / d, (z.y * w.x - z.x * w.y) / d);
+                double num = w.X * w.X + w.Y * w.Y;
+                return new Complex((z.X * w.X + z.Y * w.Y) / num, (z.Y * w.X - z.X * w.Y) / num);
             }
+
             public static Complex operator /(double a, Complex z)
             {
-                double d = z.x * z.x + z.y * z.y;
-                return new Complex((z.x * a) / d, (-z.y * a) / d);
+                double num = z.X * z.X + z.Y * z.Y;
+                return new Complex(z.X * a / num, (0.0 - z.Y) * a / num);
             }
 
             public static Complex operator /(Complex z, double a)
             {
-                return new Complex(z.x / a, z.y / a);
+                return new Complex(z.X / a, z.Y / a);
             }
+
             public static Complex operator -(Complex z)
             {
-               
-                return new Complex(-z.x, -z.y);
+                return new Complex(0.0 - z.X, 0.0 - z.Y);
             }
-           
+
+            public static Complex operator +(Complex z)
+            {
+                return z;
+            }
+
+            public static Complex operator ++(Complex z)
+            {
+                return z + new Complex(1.0, 1.0);
+            }
+
+            public static Complex operator --(Complex z)
+            {
+                return z + new Complex(-1.0, -1.0);
+            }
+
             public static implicit operator Complex(double x)
             {
-                return new Complex(x, 0);
+                return new Complex(x, 0.0);
             }
+
             public static bool operator ==(Complex left, Complex right)
             {
-                return (left.x == right.x && left.y == right.y);
+                return left.X == right.X && left.Y == right.Y;
             }
+
             public static bool operator !=(Complex left, Complex right)
             {
-                return (left.x != right.x || left.y != right.y);
+                return left.X != right.X || left.Y != right.Y;
             }
+
             private double Abs()
             {
-               
-                return Math.Sqrt(x * x + y * y);
+                return (this == 0.0) ? 0.0 : Math.Sqrt(X * X + Y * Y);
             }
+
             private double Arg()
             {
-                double o;
-                o = Math.Asin(y / Abs());
-                if (x < 0)
+                if (this == 0.0)
                 {
-                    if (y > 0) o = Math.PI - o;
-                    else o = -Math.PI - o;
+                    return double.NaN;
                 }
-                return o;
+                double num = Math.Asin(Y / Abs());
+                if (X < 0.0)
+                {
+                    num = ((!(Y > 0.0)) ? (-Math.PI - num) : (Math.PI - num));
+                }
+                return num;
             }
 
-
-
-
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="obj"></param>
             /// <returns></returns>
             public override bool Equals(object obj)
             {
-                Complex Obj;
-                Obj = (Complex)obj;
-                return (this.x == Obj.x && this.y == Obj.y);
+                Complex complex = (Complex)obj;
+                return X == complex.X && Y == complex.Y;
             }
+
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="z"></param>
             /// <returns></returns>
@@ -394,45 +190,69 @@ namespace System
             {
                 return z == this;
             }
+
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <returns></returns>
             public override string ToString()
             {
-
-                double a, b;
-                a = x;
-                b = y;
-                return "(" + a + "," + b + ")";
-
+                return ToString("B", CultureInfo.CurrentCulture);
             }
+
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="str"></param>
             /// <returns></returns>
-            public string ToString(string str="B")
+            public string ToString(string format)
             {
-                if (str == "B")
-                    return ToString();
-                if (str == "F")
-                {
-                    double a;
-                    a = x;
-                    string o = y < 0 ? "-" : "+";
-                    string b = y == 1 || y == -1 ? "" : Math.Abs(y).ToString();
-                    return x + o + b + "i";
-                }
-                return "";
+                return ToString(format, CultureInfo.CurrentCulture);
             }
+
             /// <summary>
-            /// 
+            ///
+            /// </summary>
+            /// <param name="format"></param>
+            /// <param name="formatProvider"></param>
+            /// <returns></returns>
+            public string ToString(string format, IFormatProvider formatProvider)
+            {
+                if (string.IsNullOrEmpty(format))
+                {
+                    format = "B";
+                }
+                if (formatProvider == null)
+                {
+                    formatProvider = CultureInfo.CurrentCulture;
+                }
+                switch (format)
+                {
+                    case "B":
+                        {
+                            double num = X;
+                            double num2 = Y;
+                            return "(" + num + "," + num2 + ")";
+                        }
+                    case "F":
+                        {
+                            double num = X;
+                            string text = ((Y < 0.0) ? "-" : "+");
+                            string text2 = ((Y == 1.0 || Y == -1.0) ? "" : Math.Abs(Y).ToString());
+                            return X + text + text2 + "i";
+                        }
+                    default:
+                        throw new FormatException(string.Format("The {0} format is not supported.", format));
+                }
+            }
+
+            /// <summary>
+            ///
             /// </summary>
             /// <returns></returns>
             public override int GetHashCode()
             {
-                return (x.ToString() + y.ToString()).GetHashCode();
+                return (X.ToString() + Y).GetHashCode();
             }
 
             /// <summary>Converts the string representation of a number to its complex-precision complex-point number equivalent.</summary>
@@ -440,158 +260,271 @@ namespace System
             /// <param name="str">A string that contains a complex number to convert. </param>
             public static Complex Parse(string str)
             {
-                string dexp = @"^\s*[-+]?\d+\.?\d*\s*$";
-                string cexp = @"^\s*\([-+]?\d+\.?\d*\,[-+]?\d+\.?\d*\)\s*$";
-                Regex regex = new Regex(cexp);
+                string pattern = "^\\s*[-+]?\\d+\\.?\\d*\\s*$";
+                string pattern2 = "^\\s*\\([-+]?\\d+\\.?\\d*\\,[-+]?\\d+\\.?\\d*\\)\\s*$";
+                Regex regex = new Regex(pattern2);
                 if (regex.IsMatch(str))
                 {
-                    double x, y;
-                    regex = new Regex(@"[-+]?\d+\.?\d*");
+                    regex = new Regex("[-+]?\\d+\\.?\\d*");
                     Match match = regex.Match(str);
-                    x = Convert.ToDouble(match.Groups[0].Value);
-                    match=match.NextMatch();
-                    y = Convert.ToDouble(match.Groups[0].Value);
-                    return new Complex(x, y);
+                    double num = Convert.ToDouble(match.Groups[0].Value);
+                    match = match.NextMatch();
+                    double num2 = Convert.ToDouble(match.Groups[0].Value);
+                    return new Complex(num, num2);
                 }
-                regex = new Regex(dexp);
+                regex = new Regex(pattern);
                 if (regex.IsMatch(str))
                 {
-                    double x = Convert.ToDouble(str);
-                    return x;
+                    double num = Convert.ToDouble(str);
+                    return num;
                 }
-                regex = new Regex(@"^\s*[-+]?i\s*$");
+                regex = new Regex("^\\s*[-+]?i\\s*$");
                 if (regex.IsMatch(str))
                 {
-                    double y = 1;
-                    regex = new Regex(@"[-+]?");
+                    double num2 = 1.0;
+                    regex = new Regex("[-+]?");
                     Match match = regex.Match(str);
-                    if (match.Groups[0].Value == "-") y = -1;
-                    return new Complex(0, y);
+                    if (match.Groups[0].Value == "-")
+                    {
+                        num2 = -1.0;
+                    }
+                    return new Complex(0.0, num2);
                 }
-                regex = new Regex(@"^\s*[-+]?\d+\.?\d*[-+]\d+\.?\d*i\s*$");
+                regex = new Regex("^\\s*[-+]?\\d+\\.?\\d*[-+]\\d+\\.?\\d*i\\s*$");
                 if (regex.IsMatch(str))
                 {
-                    double x, y;
-                    regex = new Regex(@"[-+]?\d+\.?\d*");
+                    regex = new Regex("[-+]?\\d+\\.?\\d*");
                     Match match = regex.Match(str);
-                    x = Convert.ToDouble(match.Groups[0].Value);
-                    regex = new Regex(@"[-+]\d+\.?\d*");
+                    double num = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex("[-+]\\d+\\.?\\d*i");
                     match = regex.Match(str);
-                    y = Convert.ToDouble(match.Groups[0].Value);
-                    return new Complex(x, y);
-                }
-                regex = new Regex(@"^\s*[-+]?\d+\.?\d*[-+]i\s*$");//5-i
-                if (regex.IsMatch(str))
-                {
-                    double x;
-                    double y = -1;
-                    regex = new Regex(@"[-+]?\d+\.?\d*");
-                    Match match = regex.Match(str);
-                    x = Convert.ToDouble(match.Groups[0].Value);
-                    regex = new Regex(@"[-+]?");
+                    str = match.Groups[0].Value;
+                    regex = new Regex("[-+]\\d+\\.?\\d*");
                     match = regex.Match(str);
-                    if (match.Groups[0].Value == "-") y = -1;
-                    return new Complex(x, y);
+                    double num2 = Convert.ToDouble(match.Groups[0].Value);
+                    return new Complex(num, num2);
                 }
-                regex = new Regex(@"^\s*[-+]?\d+\.?\d*[-+]i\d+\.?\d*\s*$");
+                regex = new Regex("^\\s*[-+]?\\d+\\.?\\d*[-+]i\\s*$");
                 if (regex.IsMatch(str))
                 {
-                    double x, y;
-                    regex = new Regex(@"[-+]?\d+\.?\d*");
+                    double num2 = 1.0;
+                    regex = new Regex("[-+]?\\d+\\.?\\d*");
                     Match match = regex.Match(str);
-                    x = Convert.ToDouble(match.Groups[0].Value);
-                    regex = new Regex(@"\d+\.?\d*");
+                    double num = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex("[-+]i");
+                    match = regex.Match(str);
+                    str = match.Groups[0].Value;
+                    regex = new Regex("[-+]");
+                    match = regex.Match(str);
+                    if (match.Groups[0].Value == "-")
+                    {
+                        num2 = -1.0;
+                    }
+                    return new Complex(num, num2);
+                }
+                regex = new Regex("^\\s*[-+]?\\d+\\.?\\d*[-+]i\\d+\\.?\\d*\\s*$");
+                if (regex.IsMatch(str))
+                {
+                    regex = new Regex("[-+]?\\d+\\.?\\d*");
+                    Match match = regex.Match(str);
+                    double num = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex("[-+]i\\d+\\.?\\d*");
+                    match = regex.Match(str);
+                    str = match.Groups[0].Value;
+                    regex = new Regex("\\d+\\.?\\d*");
+                    match = regex.Match(str);
+                    double num2 = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex("[-+]");
+                    match = regex.Match(str);
+                    if (match.Groups[0].Value == "-")
+                    {
+                        num2 = 0.0 - num2;
+                    }
+                    return new Complex(num, num2);
+                }
+                regex = new Regex("^\\s*[-+]?\\d+\\.?\\d*i\\s*$");
+                if (regex.IsMatch(str))
+                {
+                    regex = new Regex("[-+]?\\d+\\.?\\d*");
+                    Match match = regex.Match(str);
+                    double num2 = Convert.ToDouble(match.Groups[0].Value);
+                    return new Complex(0.0, num2);
+                }
+                regex = new Regex("^\\s*([-+]?i\\d+\\.?\\d*)\\s*$");
+                if (regex.IsMatch(str))
+                {
+                    regex = new Regex("\\d+\\.?\\d*");
+                    Match match = regex.Match(str);
+                    double num2 = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex("[-+]?");
+                    match = regex.Match(str);
+                    if (match.Groups[0].Value == "-")
+                    {
+                        num2 = 0.0 - num2;
+                    }
+                    return new Complex(0.0, num2);
+                }
+                regex = new Regex("^\\s*[-+]?\\d+\\.?\\d*i[-+]\\d+\\.?\\d*\\s*$");
+                if (regex.IsMatch(str))
+                {
+                    regex = new Regex("[-+]?\\d+\\.?\\d*");
+                    Match match = regex.Match(str);
+                    double num2 = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex("[-+]?\\d+\\.?\\d*");
                     match = regex.Match(str);
                     match = match.NextMatch();
-                    y = Convert.ToDouble(match.Groups[0].Value);
-                    regex = new Regex(@"[-+]");
-                    match = regex.Match(str);
-                    if (match.Groups[0].Value == "-") y = -y;
-                    return new Complex(x, y);
+                    double num = Convert.ToDouble(match.Groups[0].Value);
+                    return new Complex(num, num2);
                 }
-                regex = new Regex(@"^\s*[-+]?\d+\.?\d*i\s*$");
+                regex = new Regex("^\\s*[-+]?i[-+]\\d+\\.?\\d*\\s*$");
                 if (regex.IsMatch(str))
                 {
-                    double y;
-                    regex = new Regex(@"[-+]?\d+\.?\d*");
+                    double num2 = 1.0;
+                    regex = new Regex("[-+]\\d+\\.?\\d*");
                     Match match = regex.Match(str);
-                    y = Convert.ToDouble(match.Groups[0].Value);
-                    return new Complex(0, y);
+                    double num = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex("[-+]?");
+                    match = regex.Match(str);
+                    if (match.Groups[0].Value == "-")
+                    {
+                        num2 = -1.0;
+                    }
+                    return new Complex(num, num2);
                 }
-                regex = new Regex(@"^\s*([-+]?i\d+\.?\d*)\s*$");
+                regex = new Regex("^\\s*[-+]?i\\d+\\.?\\d*[-+]\\d+\\.?\\d*\\s*$");
                 if (regex.IsMatch(str))
                 {
-                    double y;
-                    regex = new Regex(@"\d+\.?\d*");
+                    regex = new Regex("\\d+\\.?\\d*");
                     Match match = regex.Match(str);
-                    y = Convert.ToDouble(match.Groups[0].Value);
-                    regex = new Regex(@"[-+]?");
+                    double num2 = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex("[-+]\\d+\\.?\\d*");
                     match = regex.Match(str);
-                    if (match.Groups[0].Value == "-") y = -y;
-                    return new Complex(0, y);
+                    double num = Convert.ToDouble(match.Groups[0].Value);
+                    regex = new Regex("[-+]?");
+                    match = regex.Match(str);
+                    if (match.Groups[0].Value == "-")
+                    {
+                        num2 = 0.0 - num2;
+                    }
+                    return new Complex(num, num2);
                 }
-                regex = new Regex(@"^\s*[-+]?\d+\.?\d*i[-+]\d+\.?\d*\s*$");
-                if (regex.IsMatch(str))
-                {
-                    double x, y;
-                    regex = new Regex(@"[-+]?\d+\.?\d*");
-                    Match match = regex.Match(str);
-                    y = Convert.ToDouble(match.Groups[0].Value);
-                    regex = new Regex(@"[-+]\d+\.?\d*");
-                    match = regex.Match(str);
-                    x = Convert.ToDouble(match.Groups[0].Value);
-                    return new Complex(x, y);
-                }
-                regex = new Regex(@"^\s*[-+]?i[-+]\d+\.?\d*\s*$");
-                if (regex.IsMatch(str))
-                {
-                    double x, y = 1;
-
-                    regex = new Regex(@"[-+]\d+\.?\d*");
-                    Match match = regex.Match(str);
-                    x = Convert.ToDouble(match.Groups[0].Value);
-                    regex = new Regex(@"[-+]?");
-                    match = regex.Match(str);
-                    if (match.Groups[0].Value == "-") y = -1;
-                    return new Complex(x, y);
-                }
-                regex = new Regex(@"^\s*[-+]?i\d+\.?\d*[-+]\d+\.?\d*\s*$");
-                if (regex.IsMatch(str))
-                {
-                    double x, y;
-                    regex = new Regex(@"\d+\.?\d*");
-                    Match match = regex.Match(str);
-                    y = Convert.ToDouble(match.Groups[0].Value);
-                    regex = new Regex(@"[-+]\d+\.?\d*");
-                    match = regex.Match(str);
-                    x = Convert.ToDouble(match.Groups[0].Value);
-                    regex = new Regex(@"[-+]?");
-                    match = regex.Match(str);
-                    if (match.Groups[0].Value == "-") y = -y;
-                    return new Complex(x, y);
-                }
-                throw new FormatException();
+                throw new FormatException("Input string was not in a correct format.");
             }
+
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="str"></param>
             /// <param name="a"></param>
             /// <returns></returns>
             public static bool TryParse(string str, out Complex a)
             {
-                a = new Complex();
+                a = default(Complex);
                 try
                 {
                     a = Parse(str);
                     return true;
                 }
-                catch { }
+                catch
+                {
+                }
                 return false;
             }
 
+            /// <summary>
+            ///
+            /// </summary>
+            /// <param name="other"></param>
+            /// <returns></returns>
+            Complex ISteerable.SteerTo(Complex other)
+            {
+                return Maths.Sign(this - other);
+            }
 
-            
+            TypeCode IConvertible.GetTypeCode()
+            {
+                return TypeCode.Object;
+            }
+
+            bool IConvertible.ToBoolean(IFormatProvider provider)
+            {
+                return Convert.ToBoolean(X, provider);
+            }
+
+            byte IConvertible.ToByte(IFormatProvider provider)
+            {
+                return Convert.ToByte(X, provider);
+            }
+
+            char IConvertible.ToChar(IFormatProvider provider)
+            {
+                return Convert.ToChar(X, provider);
+            }
+
+            DateTime IConvertible.ToDateTime(IFormatProvider provider)
+            {
+                return Convert.ToDateTime(X, provider);
+            }
+
+            decimal IConvertible.ToDecimal(IFormatProvider provider)
+            {
+                return Convert.ToDecimal(X, provider);
+            }
+
+            double IConvertible.ToDouble(IFormatProvider provider)
+            {
+                return X;
+            }
+
+            short IConvertible.ToInt16(IFormatProvider provider)
+            {
+                return Convert.ToInt16(X, provider);
+            }
+
+            int IConvertible.ToInt32(IFormatProvider provider)
+            {
+                return Convert.ToInt32(X, provider);
+            }
+
+            long IConvertible.ToInt64(IFormatProvider provider)
+            {
+                return Convert.ToInt64(X, provider);
+            }
+
+            float IConvertible.ToSingle(IFormatProvider provider)
+            {
+                return Convert.ToSingle(X, provider);
+            }
+
+            string IConvertible.ToString(IFormatProvider provider)
+            {
+                return ToString("B", provider);
+            }
+
+            object IConvertible.ToType(Type conversionType, IFormatProvider provider)
+            {
+                throw new Exception();
+            }
+
+            ushort IConvertible.ToUInt16(IFormatProvider provider)
+            {
+                return Convert.ToUInt16(X, provider);
+            }
+
+            uint IConvertible.ToUInt32(IFormatProvider provider)
+            {
+                return Convert.ToUInt32(X, provider);
+            }
+
+            ulong IConvertible.ToUInt64(IFormatProvider provider)
+            {
+                return Convert.ToUInt64(X, provider);
+            }
+
+            sbyte IConvertible.ToSByte(IFormatProvider provider)
+            {
+                return Convert.ToSByte(X, provider);
+            }
         }
     }
 }
